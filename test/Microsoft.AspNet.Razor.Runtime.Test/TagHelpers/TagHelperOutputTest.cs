@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System.Collections.Generic;
+using Microsoft.AspNet.Razor.Runtime.TagHelpers.Test;
 using Xunit;
 
 namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
@@ -100,7 +101,7 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
         {
             // Arrange
             var tagHelperOutput = new TagHelperOutput("p",
-                attributes: new Dictionary<string, object>
+                new TagHelperAttributes
                 {
                     { "class", "btn" },
                     { "something", "   spaced    " }
@@ -129,17 +130,20 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
         {
             // Arrange
             var tagHelperOutput = new TagHelperOutput("p",
-                attributes: new Dictionary<string, object>
+                new TagHelperAttributes
                 {
                     { originalName, "btn" },
                 });
 
             // Act
-            tagHelperOutput.Attributes[updateName] = "super button";
+            tagHelperOutput.Attributes[updateName].Value = "super button";
 
             // Assert
             var attribute = Assert.Single(tagHelperOutput.Attributes);
-            Assert.Equal(new KeyValuePair<string, object>(originalName, "super button"), attribute);
+            Assert.Equal(
+                new TagHelperAttribute(originalName, "super button"),
+                attribute,
+                CaseSensitiveTagHelperAttributeComparer.Default);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
 
         // Internal for testing
         internal TagHelperOutput(string tagName)
-            : this(tagName, new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase))
+            : this(tagName, new TagHelperAttributes())
         {
         }
 
@@ -29,10 +29,10 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
         /// <param name="attributes">The HTML attributes.</param>
         public TagHelperOutput(
             string tagName,
-            [NotNull] IDictionary<string, object> attributes)
+            [NotNull] TagHelperAttributes attributes)
         {
             TagName = tagName;
-            Attributes = new Dictionary<string, object>(attributes, StringComparer.OrdinalIgnoreCase);
+            Attributes = attributes;
             _preContent = new DefaultTagHelperContent();
             _content = new DefaultTagHelperContent();
             _postContent = new DefaultTagHelperContent();
@@ -107,7 +107,7 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
         /// a <c>Microsoft.AspNet.Mvc.Rendering.HtmlString</c> instance. MVC converts most other types to a
         /// <see cref="string"/>, then HTML encodes the result.
         /// </remarks>
-        public IDictionary<string, object> Attributes { get; }
+        public TagHelperAttributes Attributes { get; }
 
         /// <summary>
         /// Changes <see cref="TagHelperOutput"/> to generate nothing.

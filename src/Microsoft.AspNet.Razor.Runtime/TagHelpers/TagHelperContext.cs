@@ -25,12 +25,12 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
         /// <param name="getChildContentAsync">A delegate used to execute and retrieve the rendered child content 
         /// asynchronously.</param>
         public TagHelperContext(
-            [NotNull] IDictionary<string, object> allAttributes,
+            [NotNull] IEnumerable<IReadOnlyTagHelperAttribute> allAttributes,
             [NotNull] IDictionary<object, object> items,
             [NotNull] string uniqueId,
             [NotNull] Func<Task<TagHelperContent>> getChildContentAsync)
         {
-            AllAttributes = allAttributes;
+            AllAttributes = new ReadOnlyTagHelperAttributes<IReadOnlyTagHelperAttribute>(allAttributes);
             Items = items;
             UniqueId = uniqueId;
             _getChildContentAsync = getChildContentAsync;
@@ -39,7 +39,7 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
         /// <summary>
         /// Every attribute associated with the current HTML element.
         /// </summary>
-        public IDictionary<string, object> AllAttributes { get; }
+        public ReadOnlyTagHelperAttributes<IReadOnlyTagHelperAttribute> AllAttributes { get; }
 
         /// <summary>
         /// Gets the collection of items used to communicate with other <see cref="ITagHelper"/>s.
