@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Framework.Internal;
 
@@ -30,7 +31,8 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
             [NotNull] string uniqueId,
             [NotNull] Func<Task<TagHelperContent>> getChildContentAsync)
         {
-            AllAttributes = new ReadOnlyTagHelperAttributes<IReadOnlyTagHelperAttribute>(allAttributes);
+            AllAttributes = new ReadOnlyTagHelperAttributes<IReadOnlyTagHelperAttribute>(
+                allAttributes.Select(attribute => new TagHelperAttribute(attribute.Name, attribute.Value)));
             Items = items;
             UniqueId = uniqueId;
             _getChildContentAsync = getChildContentAsync;

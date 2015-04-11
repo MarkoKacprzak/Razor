@@ -36,7 +36,7 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
         {
             get
             {
-                return _attributes.LastOrDefault(attribute => SameKey(key, attribute));
+                return _attributes.FirstOrDefault(attribute => SameKey(key, attribute));
             }
         }
 
@@ -60,7 +60,7 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
         {
             get
             {
-                return _attributes.Select(attribute => attribute.Key);
+                return _attributes.Select(attribute => attribute.Name);
             }
         }
 
@@ -77,7 +77,7 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
             return _attributes.Contains(item);
         }
 
-        public bool Contains([NotNull] string key)
+        public bool ContainsKey([NotNull] string key)
         {
             return _attributes.Any(attribute => SameKey(key, attribute));
         }
@@ -87,18 +87,18 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
             return _attributes.IndexOf(item);
         }
 
-        public bool TryGetAttribute([NotNull] string key, out TAttributeType attribute)
+        public bool TryGetValue([NotNull] string key, out TAttributeType value)
         {
-            attribute = _attributes.LastOrDefault(attr => SameKey(key, attr));
+            value = _attributes.LastOrDefault(attribute => SameKey(key, attribute));
 
-            return attribute != null;
+            return value != null;
         }
 
-        public bool TryGetAttributes([NotNull] string key, out IEnumerable<TAttributeType> attributes)
+        public bool TryGetValues([NotNull] string key, out IEnumerable<TAttributeType> values)
         {
-            attributes = _attributes.Where(attribute => SameKey(key, attribute));
+            values = _attributes.Where(attribute => SameKey(key, attribute));
 
-            return attributes.Any();
+            return values.Any();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -113,7 +113,7 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
 
         protected static bool SameKey(string key, [NotNull] TAttributeType attribute)
         {
-            return string.Equals(key, attribute.Key, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(key, attribute.Name, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

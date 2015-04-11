@@ -2,33 +2,61 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
-using Microsoft.Framework.Internal;
+using Microsoft.Internal.Web.Utils;
 
 namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
 {
     public class TagHelperAttribute : IReadOnlyTagHelperAttribute
     {
-        public TagHelperAttribute([NotNull] string key, object value)
+        public TagHelperAttribute()
         {
-            Key = key;
+        }
+
+        public TagHelperAttribute(string name, object value)
+        {
+            Name = name;
             Value = value;
         }
 
-        public string Key
-        {
-            get;
-            [param: NotNull]
-            set;
-        }
+        public string Name { get; set; }
 
         public object Value { get; set; }
+
+        public static implicit operator TagHelperAttribute(string value)
+        {
+            return new TagHelperAttribute
+            {
+                Value = value
+            };
+        }
 
         public bool Equals(IReadOnlyTagHelperAttribute other)
         {
             return
                 other != null &&
-                string.Equals(Key, other.Key, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase) &&
                 Equals(Value, other.Value);
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as IReadOnlyTagHelperAttribute;
+
+            if (other != null)
+            {
+                return Equals(other);
+            }
+
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCodeCombiner
+                .Start()
+                .Add(Name, StringComparer.OrdinalIgnoreCase)
+                .Add(Value)
+                .CombinedHash;
         }
     }
 }

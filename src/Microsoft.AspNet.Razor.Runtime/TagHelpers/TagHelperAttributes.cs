@@ -6,7 +6,8 @@ using Microsoft.Framework.Internal;
 
 namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
 {
-    public class TagHelperAttributes : ReadOnlyTagHelperAttributes<TagHelperAttribute>, IList<TagHelperAttribute>
+    public class TagHelperAttributes
+        : ReadOnlyTagHelperAttributes<TagHelperAttribute>, IList<TagHelperAttribute>
     {
         public new TagHelperAttribute this[int index]
         {
@@ -30,23 +31,37 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
             [param: NotNull]
             set
             {
+                // Name will be null if user attempts to set the attribute via an implicit conversion:
+                // output.Attributes["someName"] = "someValue"
+                if (value.Name == null)
+                {
+                    value.Name = key;
+                }
+
                 var attributeReplaced = false;
 
-                for (var i = _attributes.Count - 1; i >= 0; i++)
+                for (var i = 0; i < _attributes.Count; i++)
                 {
                     if (SameKey(key, _attributes[i]))
                     {
                         // We replace the last attribute with the provided value, remove all the rest.
                         if (!attributeReplaced)
                         {
-                            attributeReplaced = true;
+                            // We replace the first attribute we find with the same key.
                             _attributes[i] = value;
+                            attributeReplaced = true;
                         }
                         else
                         {
-                            _attributes.RemoveAt(i);
+                            _attributes.RemoveAt(i--);
                         }
                     }
+                }
+
+                // If we didn't replace an attribute value we should add a new entry.
+                if (!attributeReplaced)
+                {
+                    Add(value);
                 }
             }
         }
@@ -60,9 +75,9 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
         }
 
         // Internal for testing
-        internal void Add([NotNull] string key, object value)
+        internal void Add([NotNull] string name, object value)
         {
-            _attributes.Add(new TagHelperAttribute(key, value));
+            _attributes.Add(new TagHelperAttribute(name, value));
         }
 
         public void Add([NotNull] TagHelperAttribute attribute)

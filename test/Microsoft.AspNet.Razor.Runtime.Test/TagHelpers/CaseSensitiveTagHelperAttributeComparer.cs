@@ -21,8 +21,8 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers.Test
             [NotNull] IReadOnlyTagHelperAttribute attributeY)
         {
             return
-                // Normal comparer doesn't care about the Key case, in tests we do.
-                string.Equals(attributeX.Key, attributeY.Key, StringComparison.Ordinal) &&
+                // Normal comparer doesn't care about the Name case, in tests we do.
+                string.Equals(attributeX.Name, attributeY.Name, StringComparison.Ordinal) &&
                 Equals(attributeX.Value, attributeY.Value);
         }
 
@@ -30,7 +30,7 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers.Test
         {
             return HashCodeCombiner
                 .Start()
-                .Add(attribute.Key, StringComparer.Ordinal)
+                .Add(attribute.Name, StringComparer.Ordinal)
                 .Add(attribute.Value)
                 .CombinedHash;
         }

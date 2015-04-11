@@ -154,10 +154,10 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
         {
             // Arrange
             var executionContext = new TagHelperExecutionContext("p", selfClosing: false);
-            executionContext.HTMLAttributes[originalName].Value = "hello";
+            executionContext.HTMLAttributes[originalName] = "hello";
 
             // Act
-            executionContext.HTMLAttributes[updatedName].Value = "something else";
+            executionContext.HTMLAttributes[updatedName] = "something else";
 
             // Assert
             var attribute = Assert.Single(executionContext.HTMLAttributes);
@@ -195,7 +195,10 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
             executionContext.AddHtmlAttribute("foo", "bar");
 
             // Assert
-            Assert.Equal(expectedAttributes, executionContext.HTMLAttributes, CaseSensitiveTagHelperAttributeComparer.Default);
+            Assert.Equal(
+                expectedAttributes, 
+                executionContext.HTMLAttributes, 
+                CaseSensitiveTagHelperAttributeComparer.Default);
         }
 
         [Fact]
@@ -216,7 +219,10 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
             executionContext.AddHtmlAttribute("foo", "bar");
 
             // Assert
-            Assert.Equal(expectedAttributes, executionContext.AllAttributes, CaseSensitiveTagHelperAttributeComparer.Default);
+            Assert.Equal(
+                expectedAttributes, 
+                executionContext.AllAttributes, 
+                CaseSensitiveTagHelperAttributeComparer.Default);
         }
 
         [Fact]

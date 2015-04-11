@@ -136,12 +136,12 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
                 });
 
             // Act
-            tagHelperOutput.Attributes[updateName].Value = "super button";
+            tagHelperOutput.Attributes[updateName] = "super button";
 
             // Assert
             var attribute = Assert.Single(tagHelperOutput.Attributes);
             Assert.Equal(
-                new TagHelperAttribute(originalName, "super button"),
+                new TagHelperAttribute(updateName, "super button"),
                 attribute,
                 CaseSensitiveTagHelperAttributeComparer.Default);
         }

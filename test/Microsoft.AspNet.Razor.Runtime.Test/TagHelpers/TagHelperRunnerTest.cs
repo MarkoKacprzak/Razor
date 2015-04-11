@@ -185,7 +185,7 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
                 output.TagName = "foo";
 
                 TagHelperAttribute classAttribute;
-                if (output.Attributes.TryGetAttribute("class", out classAttribute))
+                if (output.Attributes.TryGetValue("class", out classAttribute))
                 {
                     classAttribute.Value = "somethingelse";
                 }

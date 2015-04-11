@@ -7,7 +7,7 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
 {
     public interface IReadOnlyTagHelperAttribute : IEquatable<IReadOnlyTagHelperAttribute>
     {
-        string Key { get; }
+        string Name { get; }
 
         object Value { get; }
     }
