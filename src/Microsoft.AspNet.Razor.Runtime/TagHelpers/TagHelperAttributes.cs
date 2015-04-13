@@ -42,9 +42,9 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
 
                 for (var i = 0; i < _attributes.Count; i++)
                 {
-                    if (SameKey(key, _attributes[i]))
+                    if (KeyEquals(key, _attributes[i]))
                     {
-                        // We replace the last attribute with the provided value, remove all the rest.
+                        // We replace the first attribute with the provided value, remove all the rest.
                         if (!attributeReplaced)
                         {
                             // We replace the first attribute we find with the same key.
@@ -95,9 +95,9 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
             _attributes.CopyTo(attributes, index);
         }
 
-        public bool Remove([NotNull] string key)
+        public bool RemoveAll([NotNull] string key)
         {
-            return _attributes.RemoveAll(attribute => SameKey(key, attribute)) > 0;
+            return _attributes.RemoveAll(attribute => KeyEquals(key, attribute)) > 0;
         }
 
         public bool Remove([NotNull] TagHelperAttribute item)

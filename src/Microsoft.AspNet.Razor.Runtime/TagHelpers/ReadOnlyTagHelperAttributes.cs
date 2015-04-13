@@ -36,7 +36,7 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
         {
             get
             {
-                return _attributes.FirstOrDefault(attribute => SameKey(key, attribute));
+                return _attributes.FirstOrDefault(attribute => KeyEquals(key, attribute));
             }
         }
 
@@ -79,7 +79,7 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
 
         public bool ContainsKey([NotNull] string key)
         {
-            return _attributes.Any(attribute => SameKey(key, attribute));
+            return _attributes.Any(attribute => KeyEquals(key, attribute));
         }
 
         public int IndexOf([NotNull] TAttributeType item)
@@ -89,14 +89,14 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
 
         public bool TryGetValue([NotNull] string key, out TAttributeType value)
         {
-            value = _attributes.LastOrDefault(attribute => SameKey(key, attribute));
+            value = _attributes.LastOrDefault(attribute => KeyEquals(key, attribute));
 
             return value != null;
         }
 
         public bool TryGetValues([NotNull] string key, out IEnumerable<TAttributeType> values)
         {
-            values = _attributes.Where(attribute => SameKey(key, attribute));
+            values = _attributes.Where(attribute => KeyEquals(key, attribute));
 
             return values.Any();
         }
@@ -111,7 +111,7 @@ namespace Microsoft.AspNet.Razor.Runtime.TagHelpers
             return _attributes.GetEnumerator();
         }
 
-        protected static bool SameKey(string key, [NotNull] TAttributeType attribute)
+        protected static bool KeyEquals(string key, [NotNull] TAttributeType attribute)
         {
             return string.Equals(key, attribute.Name, StringComparison.OrdinalIgnoreCase);
         }
